@@ -1,0 +1,39 @@
+{
+  "name": "Chocolate Factory Mod",
+  "version": "0.0.1",
+  "additionFile": [
+    "readme.md"
+  ],
+  "addonPlugin": [
+    {
+      "modName": "TweeReplacer",
+      "addonName": "TweeReplacerAddon",
+      "modVersion": "1.0.0",
+      "params": []
+    },
+    {
+      "modName": "ReplacePatcher",
+      "addonName": "ReplacePatcherAddon",
+      "modVersion": "1.0.0",
+      "params": []
+    }
+  ],
+  "dependenceInfo": [
+    {
+      "modName": "ModLoader",
+      "version": ">=1.2.1"
+    },
+    {
+      "modName": "ModLoader DoL ImageLoaderHook",
+      "version": ">=2.0.0"
+    },
+    {
+      "modName": "TweeReplacer",
+      "version": "1.0.0"
+    },
+    {
+      "modName": "ReplacePatcher",
+      "version": "1.0.0"
+    }
+  ]
+}
