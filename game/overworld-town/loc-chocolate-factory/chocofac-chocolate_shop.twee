@@ -152,14 +152,18 @@
 <<if $rng gte 86>>
 	<<skulshopevents>> /* 偷东西被抓到 */
 <<else>>
-	<<link [[拿走|ChocoFacMod Chocolate Shop]]>>
-	    <<if $chocolateinbox is "special">>
-	        <<set $chocolateCounts.special += 1>>
-	    <<else>>
-	        <<set $chocolateCounts.normal += 1>>
-	    <</if>>
-	    <<crimeUp 50 "thievery">>
-	<</link>><<crime "thievery">>
+    <<if $chocolateinbox is "special">>
+        <<link [[拆开巧克力|ChocoFacMod Events Get Ticket]]>>
+            <<set $chocolateCounts.special += 1>>
+            <<crimeUp 50 "thievery">>
+        <</link>>
+    <<else>>
+        <<link [[拿走巧克力|ChocoFacMod Chocolate Shop]]>>
+            <<set $chocolateCounts.normal += 1>>
+            <<crimeUp 50 "thievery">>
+        <</link>><<crimeUp 50 "thievery">>
+    <</if>>
+	<<crime "thievery">>
 	<br>
 	<<link [[放着不动|ChocoFacMod Chocolate Shop]]>><</link>>
 	<br>
@@ -167,6 +171,22 @@
 
 :: ChocoFacMod Buy Chocolate
 /* 买巧克力 */
+你把 £10 交给店员，他从身后的货架上拿了一块巧克力给你。
+<br><br>
+
+<<if $rng gte 99 and $chocolateCounts.special lt $chocolate.special.max>>  /* 1/00 概率有奖 */
+    <<set $chocolateinbox = "special">>
+<<else>>
+    <<set $chocolateinbox = "normal">>
+<</if>>
+
+<<if $chocolateinbox is "special">>
+    <<link [[拆开巧克力|ChocoFacMod Events Get Ticket]]>><</link>>
+<<else>>
+    <<link [[拆开巧克力|ChocoFacMod Events Get Nothing]]>><</link>>
+<</if>>
 
 :: ChocoFacMod Events Get Ticket
 /* 获得进工厂的门票 */
+
+:: ChocoFacMod Events Get Nothing
