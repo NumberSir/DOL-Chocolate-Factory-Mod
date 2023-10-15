@@ -9,7 +9,33 @@
       "modName": "TweeReplacer",
       "addonName": "TweeReplacerAddon",
       "modVersion": "1.0.0",
-      "params": []
+      "params": [
+        {
+          "passage": "Shopping Centre",
+          "findString": "\t\t\t/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to \"top\">><</link>>\n\t\t\t<br>*/",
+          "replace": "\t\t\t/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to \"top\">><</link>>\n\t\t\t<br>*/\n\t\t\t/* ChocoFacMod-BEGIN */\n\t\t\t<<link [[巧克力店 (0:01)|ChocoFacMod Chocolate Shop]]>><<pass 1>><</link>>\n\t\t\t<br>\n\t\t\t/* ChocoFacMod-END */"
+        },
+        {
+          "passage": "Shopping Centre",
+          "findString": "\t\t\t/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to \"bottom\">><</link>>\n\t\t\t<br>*/",
+          "replace": "\t\t\t/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to \"bottom\">><</link>>\n\t\t\t<br>*/\n\t\t\t/* ChocoFacMod-BEGIN */\n\t\t\t<<link [[巧克力店 (0:01)|ChocoFacMod Chocolate Shop]]>><<pass 1>><</link>>\n\t\t\t<br>\n\t\t\t/* ChocoFacMod-END */"
+        },
+        {
+          "passage": "gameStartOnly",
+          "findString": "<</widget>>",
+          "replace": "\t/* ChocoFacMod-BEGIN */\n\t<<run initChocolateVariables()>>\n\t/* ChocoFacMod-END */\n<</widget>>"
+        },
+        {
+          "passage": "Widgets variablesStatic",
+          "findString": "<</widget>>",
+          "replace": "\t/* ChocoFacMod-BEGIN */\n\t<<run initChocolateConstants()>>\n\t/* ChocoFacMod-END */\n<</widget>>"
+        },
+        {
+          "passage": "Widgets variablesVersionUpdate",
+          "findString": "<</widget>>",
+          "replace": "\t/* ChocoFacMod-BEGIN */\n\t<<if $chocolateCounts is undefined>>\n\t\t<<run initChocolateVariables()>>\n\t<</if>>\n\t/* ChocoFacMod-END */\n<</widget>>"
+        }
+      ]
     },
     {
       "modName": "ReplacePatcher",

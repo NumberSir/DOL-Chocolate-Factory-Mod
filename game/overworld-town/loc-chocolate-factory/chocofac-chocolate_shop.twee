@@ -1,0 +1,172 @@
+/* Code From Clothing Shop */
+:: ChocoFacMod Chocolate Shop [exitCheckBypass]
+<div id="chocolateShop-div" class="chocolate-shop-div">
+	<<chocolateShop-main>>
+</div>
+
+:: ChocoFacMod Chocolate Shop Widgets [widget]
+<<widget "chocolateShop-main">>
+    <<set $outside to 0>><<set $location to "chocolate_shop">><<effects>>
+
+    你位于镇里唯一的一家巧克力商店。这里的货架上商品琳琅满目，不过——全部都是巧克力。
+    <br><br>
+    <<if !$stress is 0 or !$tiredness is 0 or !$trauma is 0>>
+        闻着巧克力的香甜气息，你感觉浑身放松了不少。
+        <<if !$stress is 0>><<lstress>><<stress -6>><</if>>
+        <<if !$tiredness is 0>><<ltiredness>><<tiredness -6>><</if>>
+        <<if !$trauma is 0>><<ltrauma>><<trauma -6>><</if>>
+    <</if>>
+
+    <<if Time.hour is 21>>
+        已经到下班的时间了，人们开始离开巧克力店。
+        <br><br>
+
+        <<if $exposed lte 0>>
+            <<highicon>><<link [[离开商店|High Street]]>><</link>>
+            <br>
+        <<else>>
+            <<link [["躲起来直到人走光 (1:00)"|ChocoFacMod Chocolate Shop]]>><<pass 1 hour>><</link>>
+        <</if>>
+    <<else>>
+        <<if Time.dayState is "night">>
+            你独自一人待在商店里，黑咕隆咚。
+            <br><br>
+        <<elseif #exposed gte 1>>
+            你藏在一处货架后面，遮掩着自己的身体。
+            <br><br>
+        <</if>>
+
+        <<if Time.dayState is "night" and Time.hour isnot $closinghour>>
+            <<if !$weekly.theft.chocolateShopRegister>>
+                <<registericon>><<link [[检查收银台|ChocoFacMod Chocolate Shop Register]]>><</link>>
+                <br>
+            <</if>>
+            <<if !$weekly.theft.chocolateShopFoodShelf>>
+                /* TODO: icon */
+                <<link [[检查货架|ChocoFacMod Chocolate Shop Food Shelf]]>><</link>>
+                <br>
+            <</if>>
+        <</if>>
+
+        /* 白天营业时间 */
+        <<if $money gte 10>>
+            <<link [[买块巧克力 (£10)|ChocoFacMod Buy Chocolate]]>><<set $money -= 10>><</link>>
+            <br>
+        <<else>>
+            你现在买不起巧克力。
+            <br>
+        <</if>>
+    <</if>>
+    <<link [[离开巧克力店|Shopping Centre]]>><</link>>
+<</widget>>
+
+:: ChocoFacMod Chocolate Shop Register
+/* 偷收银台钱 */
+<<set $outside to 0>><<effects>><<set $lock to 200>>
+柜台上有一台普通收银机，锁得死死的。
+<br><br>
+<<if currentSkillValue('skulduggery') gte $lock>>
+	<span class="green">锁看起来很容易撬开。</span>
+	<br><br>
+	<<link [[撬开它 (0:10)|ChocoFacMod Chocolate Shop Register Sneak]]>><<pass 10>><<crimeUp 10 "thievery">><</link>><<crime "thievery">>
+	<br>
+<<else>>
+	<span class="red">这把锁看上去超出了你的能力范围。</span><<skulduggeryrequired>>
+	<br><br>
+<</if>>
+<<link [[离开|ChocoFacMod Chocolate Shop]]>><</link>>
+<br>
+
+:: ChocoFacMod Chocolate Shop Register Sneak
+/* 撬开锁了 */
+<<set $outside to 0>><<effects>><<set $lock to 200>>
+<<set $weekly.theft.chocolateShopRegister to true>>
+<<set $tip to random(3000, 9000)>>
+
+你熟练打开了收银机，清点着里面的钱。
+一共有<<printmoney $tip>>。
+<br><br>
+
+<<if $skulduggery lt 300>>
+	<<skulduggeryskilluse>>
+<<else>>
+	<span class="blue">这锁对你来说轻而易举，你已经没法精进技巧了。</span>
+<</if>>
+<br><br>
+
+<<if $rng gte 86>>
+	<<skulshopevents>> /* 偷东西被抓到 */
+<<else>>
+	<<link [[拿走|ChocoFacMod Chocolate Shop]]>><<set $money += $tip>><<crimeUp `$tip / 100` "thievery">><</link>><<crime "thievery">>
+	<br>
+	<<link [[放着不动|ChocoFacMod Chocolate Shop]]>><</link>>
+	<br>
+<</if>>
+
+:: ChocoFacMod Chocolate Shop Food Shelf
+/* 偷巧克力 */
+<<set $outside to 0>><<effects>><<set $lock to 500>>
+最角落的货架背后有一个锁起来的保险箱，看上去毫不起眼，不知道里面放着什么
+<br><br>
+<<if currentSkillValue('skulduggery') gte $lock>>
+	<span class="green">锁看起来很容易撬开。</span>
+	<br><br>
+	<<link [[撬开它 (0:30)|ChocoFacMod Chocolate Shop Food Shelf Sneak]]>><<pass 30>><<crimeUp 30 "thievery">><</link>><<crime "thievery">>
+	<br>
+<<else>>
+	<span class="red">这把锁看上去超出了你的能力范围。</span><<skulduggeryrequired>>
+	<br><br>
+<</if>>
+<<link [[离开|ChocoFacMod Chocolate Shop]]>><</link>>
+<br>
+
+:: ChocoFacMod Chocolate Shop Food Shelf Sneak
+/* 撬开锁了 */
+<<set $outside to 0>><<effects>><<set $lock to 200>>
+<<set $weekly.theft.chocolateShopFoodShelf to true>>
+
+<<if $rng gte 96 and $chocolateCounts.special lt $chocolate.special.max>>  /* 1/25 概率有奖 */
+    <<set $chocolateinbox = "special">>
+<<else>>
+    <<set $chocolateinbox = "normal">>
+<</if>>
+
+你费了一番功夫打开了保险箱，它比想象中要精巧许多，但对你来说并不算什么难事。
+<br><br>
+<<if $chocolateinbox is "special">>
+    躺在保险箱中的是一块与货架上所有巧克力包装都不同的巧克力，包装精美，散发着诱人的香味。
+    /* TODO: 巧克力图标 */
+    <br><br>
+<<else>>
+    在保险箱里只不过是一些普通的巧克力。
+    <br><br>
+<</if>>
+
+<<if $skulduggery lt 500>>
+	<<skulduggeryskilluse>>
+<<else>>
+	<span class="blue">这锁对你来说轻而易举，你已经没法精进技巧了。</span>
+<</if>>
+<br><br>
+
+<<if $rng gte 86>>
+	<<skulshopevents>> /* 偷东西被抓到 */
+<<else>>
+	<<link [[拿走|ChocoFacMod Chocolate Shop]]>>
+	    <<if $chocolateinbox is "special">>
+	        <<set $chocolateCounts.special += 1>>
+	    <<else>>
+	        <<set $chocolateCounts.normal += 1>>
+	    <</if>>
+	    <<crimeUp 50 "thievery">>
+	<</link>><<crime "thievery">>
+	<br>
+	<<link [[放着不动|ChocoFacMod Chocolate Shop]]>><</link>>
+	<br>
+<</if>>
+
+:: ChocoFacMod Buy Chocolate
+/* 买巧克力 */
+
+:: ChocoFacMod Events Get Ticket
+/* 获得进工厂的门票 */

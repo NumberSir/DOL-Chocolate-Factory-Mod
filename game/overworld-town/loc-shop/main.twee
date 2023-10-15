@@ -1,0 +1,183 @@
+:: Shopping Centre
+<<set $outside to 0>><<set $location to "shopping_centre">><<effects>>
+<<if Time.dayState is "day">>
+	You are on the main floor of the shopping centre. It's crowded with shoppers.
+<<elseif Time.dayState is "dusk">>
+	You are on the main floor of the shopping centre. The shops are still open, but there are fewer people around as it nears closing time.
+<<elseif Time.dayState is "dawn">>
+	You are on the main floor of the shopping centre. The shops are opening but it's not yet busy.
+<<elseif Time.dayState is "night">>
+	You are on the main floor of the shopping centre. It's probably illegal to be here right now.
+<</if>>
+<br><br>
+
+<<if Time.days is 0 and $NPCName[$NPCNameList.indexOf("Robin")].init is 0 and $exposed lte 0 and Time.hour gte 17 and Time.hour lte 19>>
+		<<set $robindebt to 0>><<set $robindebtlimit to 5>>
+		<<npc Robin>><<initnpc Robin>><<person1>>
+		You see a familiar figure leaving one of the shops with a large box. <<He>> notices you at the same time. "Hey!" <<He>> shouts. It's Robin. <<Hes>> another resident at the orphanage. <<Hes>> always looked up to you, despite being about the same age. <<He>> quickly fumbles around with the box, stuffing it in an oversized bag before approaching you. "I didn't expect to see you today," <<he>> says, <<his>> eyes shifting between you and the box.
+		<br><br>
+		"Don't peek! I wanted to surprise you with this when I got home. Remember, <span class="gold">you can visit me in my room</span> anytime you want. I can't wait to show you, I'm so excited!" <<He>> puts the box down and hugs you, then runs off with it before you can respond.
+		<br><br>
+		<<endevent>>
+		<<link [[Next|Shopping Centre]]>><<set $eventskip to 1>><</link>>
+		<br>
+<<elseif $stress gte $stressmax>>
+	<<passoutshop>>
+<<else>>
+	<<if $arousal gte $arousalmax>>
+		<<orgasmLocation "shoppingCentre">>
+	<</if>>
+	<<if Time.hour is 21>>
+		It's closing time. Security is herding everyone outside. <<if $exposed gte 1>>Panic swells within you as you realise how exposed you'll be should security find you in this state of dress.<</if>>
+		<br><br>
+
+		<<if $exposed lte 0>>
+			<<highicon>><<link [[Go outside|High Street]]>><</link>>
+			<br>
+		<<else>>
+			<<link [[Hide until it's over (1:00)|Shopping Centre]]>><<pass 1 hour>><</link>>
+		<</if>>
+	<<else>>
+		<<if $exposed gte 2>>
+			You feel so vulnerable with your privates exposed.
+			<<if $leftarm is "bound" and $rightarm is "bound">>
+				With your arms bound you can't even cover yourself.
+			<</if>>
+			<<if Time.dayState is "night">>
+				You must admit though that standing unclad in this often-crowded space is exhilarating. Still, you must find a way to fix your predicament.
+				<br><br>
+			<<else>>
+				<<trauma 9>>
+				Your face aflame with embarrassment, you run into the restroom.
+				<br><br>
+			<</if>>
+		<<elseif $exposed gte 1>>
+			You are dressed really inappropriately for public!
+			<<if $leftarm is "bound" and $rightarm is "bound">>
+				With your arms bound you can't even cover yourself.
+			<</if>>
+			<<if Time.dayState is "night">>
+				Fortunately there's no one around to see you in this state. Still, you must find a way to fix your predicament.
+				<br><br>
+			<<else>>
+				<<trauma 9>>
+				Your face aflame with embarrassment, you run into the restroom.
+				<<gtrauma>><<gstress>><<trauma 6>><<stress 6>>
+				<br><br>
+			<</if>>
+		<</if>>
+
+		<<if Time.dayState is "night">>
+			<<hairdressericon>><<link [[Hairdressers (0:01)|Hairdressers Lock]]>><<pass 1>><</link>>
+			<br>
+			<<petshopicon>><<link [[Pet shop (0:01)|Pet Shop Lock]]>><<pass 1>><</link>>
+			<br>
+			<<tattooicon>><<link [[Tattoo parlour (0:01)|Tattoo Parlour Lock]]>><<pass 1>><</link>>
+			<br>
+			<<wardrobeicon>><<link [[Furniture shop (0:01)|Furniture Shop]]>><<pass 1>><</link>>
+			<br>
+			/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to "top">><</link>>
+			<br>*/
+			/* ChocoFacMod-BEGIN */
+			<<link [[巧克力店 (0:01)|Chocolate Shop]]>><<pass 1>><</link>>
+			<br>
+			/* ChocoFacMod-END */
+			<br>
+			<<stairsupicon>><<link [[Go upstairs (0:02)|Shopping Centre Top]]>><<pass 2>><</link>>
+			<br>
+			<<highicon>><<link [[Go outside (0:02)|Shopping Centre Entrance Sneak]]>><<pass 2>><</link>>
+			<br>
+		<<elseif $exposed gte 1>>
+			<<toileticon>><<link [[Restroom|Shopping Centre Restroom]]>><</link>>
+			<br>
+		<<elseif $earSlime.growth gt 50 and random(0,1000) lt Math.clamp(($exhibitionism / 3) + ($daily.earSlimeShoppingCentre or 0), 0, 10) and !$weekly.earSlimeShoppingCentre>>
+			<<earSlimeShoppingExhibitionism>>
+		<<else>>
+			<<if $earSlime.growth gt 50 and !$weekly.earSlimeShoppingCentre>>
+				<<set $daily.earSlimeShoppingCentre to ($daily.earSlimeShoppingCentre or 0) + 1>>
+			<</if>>
+			<<if $edenshopping is 0 and $money gte 5000>>
+				<<edenicon "supplies">><<link [[Buy Eden's supplies (0:30 £50)|Eden Supplies]]>><<pass 30>><<set $money -= 5000>><</link>>
+				<br>
+			<</if>>
+			<<if $edenfurniture is 1 and $edenpillow isnot 1>>
+				<<edenicon "rug">><<link [[Buy a rug and some pillows (0:10)|Shop Eden Pillows]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $edenfurniture is 2 and $edencurtains isnot 1>>
+				<<ind>><<link [[Buy some curtains (0:10)|Shop Eden Curtains]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $edenfurniture is 3 and $edenloveseat is 7 and !$edencushions>>
+				<<tailoricon>><<link [[Buy some cushion materials (0:10)|Shop Eden Cushions]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $valentines_eden is 1 and !$valentines_eden_bought>>
+				<<gifticon "valentine">><<link [[Find a Valentine's day gift for Eden (0:10)|Shop Eden Valentines]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $halloween_eden is 1 and !$halloween_eden_bought>>
+				<<sweetsicon>><<link [[Buy sweets for Eden (0:10)|Shop Eden Sweets]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $christmas_gift_eden is undefined and $christmas is 1 and $syndromeeden gte 1>>
+				<<checkforloveinterests>><<if isLoveInterest("Eden")>><<gifticon "love">><<else>><<gifticon "christmas">><</if>><<link [[Find a gift for Eden (0:10)|Shop Eden Gift]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if $christmas_gift is undefined and $christmas is 1>>
+				<<if $money gte 10000>>
+					<<gifticon "christmas">><<link [[Buy gifts for the orphans (0:40 £100)|Shop Gifts]]>><<pass 40>><<set $money -= 10000>><<set $christmas_gift to "clothes_unwrapped">><</link>>
+					<br>
+				<<else>>
+					You could buy gifts for the orphans here, <span class="blue">if you had more money.</span>
+					<br><br>
+				<</if>>
+			<</if>>
+			<<if $christmas_gift_robin is undefined and $christmas is 1 and $NPCName[$NPCNameList.indexOf("Robin")].init is 1>>
+				<<checkforloveinterests>><<if isLoveInterest("Robin")>><<gifticon "love">><<else>><<gifticon "christmas">><</if>><<link [[Find a gift for Robin (0:10)|Shop Robin Gift]]>><<pass 10>><</link>>
+				<br>
+			<</if>>
+			<<if ($christmas_gift_robin isnot undefined or $christmas_gift isnot undefined) and $christmas_wrap is undefined>>
+				<<if $money gte 1000>>
+				<<gifticon "wrapping">><<link [[Buy wrapping paper (0:10 £10)|Shop Paper]]>><<pass 10>><<set $money -= 1000>><<set $christmas_wrap to 1>><</link>>
+				<br>
+				<<else>>
+					<br>
+					<span class="blue">You'll need £10 for wrapping paper.</span>
+					<br><br>
+				<</if>>
+			<</if>>
+			<<if ($brothelVending isnot undefined and $brothelVending.status is "asked") or ($brothelVending isnot undefined and $brothelVending.status is "sold")>>
+				<<if $money gte 200000>>
+					<<condommachineicon>><<link [[Buy a vending machine (0:10 £2,000)|Shop Brothel VM]]>><<pass 10>><<set $money -= 200000>><<set $brothelVending.status to "bought">><</link>>
+					<br>
+				<<else>>
+					<br>
+					<span class="blue">You'll need £2,000 to buy a vending machine.</span>
+					<br><br>
+				<</if>>
+			<</if>>
+			<<hairdressericon>><<link [[Hairdressers (0:01)|Hairdressers]]>><<pass 1>><</link>>
+			<br>
+			<<petshopicon>><<link [[Pet shop (0:01)|Pet Shop]]>><<pass 1>><</link>>
+			<br>
+			<<tattooicon>><<link [[Tattoo parlour (0:01)|Tattoo Parlour]]>><<pass 1>><</link>>
+			<br>
+			<<wardrobeicon>><<link [[Furniture shop (0:01)|Furniture Shop]]>><<pass 1>><</link>>
+			<br>
+			/*Comment out when a new shop is added in its place, uncomment when required*/
+			/*Used to keep the `Go Upstairs` and High Street` in lines with the top floor*/
+			/*<<closedstoreicon>><<link [[Empty shop (0:01)|EmptyStore]]>><<pass 1>><<set $shopFloor to "bottom">><</link>>
+			<br>*/
+			/* ChocoFacMod-BEGIN */
+			<<link [[巧克力店 (0:01)|Chocolate Shop]]>><<pass 1>><</link>>
+			<br>
+			/* ChocoFacMod-END */
+			<br>
+			<<stairsupicon>><<link [[Go upstairs (0:02)|Shopping Centre Top]]>><<pass 2>><</link>>
+			<br>
+			<<highicon>><<link [[High Street (0:02)|High Street]]>><<pass 2>><</link>>
+			<br>
+		<</if>>
+	<</if>>
+<</if>>
